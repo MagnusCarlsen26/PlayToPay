@@ -28,12 +28,14 @@ services:
 
   caddy:
     image: caddy:2-alpine
+    profiles:
+      - https
     restart: unless-stopped
     ports:
       - "80:80"
       - "443:443"
     environment:
-      APP_DOMAIN: ${APP_DOMAIN:?APP_DOMAIN is required}
+      APP_DOMAIN: ${APP_DOMAIN:-localhost}
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data
@@ -45,8 +47,8 @@ services:
     build: .
     restart: unless-stopped
     command: bin/start-web
-    expose:
-      - "8000"
+    ports:
+      - "80:8000"
     environment:
       PORT: 8000
       DATABASE_URL: postgresql://${POSTGRES_USER:-playto}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-playto_pay}
