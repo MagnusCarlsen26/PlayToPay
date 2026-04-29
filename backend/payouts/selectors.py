@@ -1,7 +1,7 @@
 from django.db.models import QuerySet
 
 from .models import BankAccount, LedgerEntry, Merchant, MerchantBalance, Payout
-
+# TODO: Make sure this isn't vulnerable to SQL injecttion
 RECONCILIATION_SQL = """
 WITH ledger_totals AS (
     SELECT

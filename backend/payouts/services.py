@@ -1,3 +1,4 @@
+# TODO: Many functions in this file are utility functions. They should be imported in the file.
 import hashlib
 import json
 import random
@@ -11,14 +12,15 @@ from django.db.models import F
 from django.utils import timezone
 
 from .models import BankAccount, IdempotencyKey, LedgerEntry, Merchant, MerchantBalance, Payout
-
-
+# TODO: These Errors should be placed in a seperate file
+# Probably backend/payout/errors/
 class PayoutError(Exception):
     status_code = 400
     error_code = "payout_error"
     message = "Payout error"
 
     def __init__(self, message: str | None = None):
+        # TODO: not sure why there is an ambiguity in choosing what should be used - message or self.message. If possible remove the ambiguity
         super().__init__(message or self.message)
         self.message = message or self.message
 
@@ -109,7 +111,7 @@ def get_merchant_from_header(raw_merchant_id: str | None) -> Merchant:
     except Merchant.DoesNotExist as exc:
         raise InvalidMerchantContext from exc
 
-
+# TODO: This function is too long. Try to break this down into smaller functions.
 def request_payout(
     *,
     merchant: Merchant,
@@ -128,6 +130,8 @@ def request_payout(
     payload = {"amount_paise": amount_paise, "bank_account_id": str(bank_account_id)}
     fingerprint = fingerprint_request(request_method, request_path, payload)
 
+    # TODO: Probably this transaction.atomic() is not needed.
+    # because there is already transaction.atomic() inside _claim_idempotency_key()
     with transaction.atomic():
         key_record, created = _claim_idempotency_key(
             merchant=merchant,
