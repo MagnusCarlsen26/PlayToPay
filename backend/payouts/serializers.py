@@ -9,7 +9,7 @@ class PayoutRequestSerializer(serializers.Serializer):
 
 
 class MerchantBalanceSerializer(serializers.ModelSerializer):
-    merchant_id = serializers.UUIDField(source="merchant_id", read_only=True)
+    merchant_id = serializers.UUIDField(read_only=True)
     total_balance_paise = serializers.SerializerMethodField()
 
     class Meta:
@@ -21,7 +21,7 @@ class MerchantBalanceSerializer(serializers.ModelSerializer):
 
 
 class LedgerEntrySerializer(serializers.ModelSerializer):
-    payout_id = serializers.UUIDField(source="payout_id", read_only=True)
+    payout_id = serializers.UUIDField(read_only=True)
 
     class Meta:
         model = LedgerEntry
@@ -29,7 +29,7 @@ class LedgerEntrySerializer(serializers.ModelSerializer):
 
 
 class PayoutSerializer(serializers.ModelSerializer):
-    bank_account_id = serializers.UUIDField(source="bank_account_id", read_only=True)
+    bank_account_id = serializers.UUIDField(read_only=True)
 
     class Meta:
         model = Payout
