@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
 set -eu
 
-exec celery -A config beat --workdir backend --loglevel="${CELERY_LOG_LEVEL:-info}"
+cd backend
+exec celery -A config beat --loglevel="${CELERY_LOG_LEVEL:-info}"
