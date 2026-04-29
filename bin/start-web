@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+set -eu
+
+python backend/manage.py migrate --noinput
+python backend/manage.py collectstatic --noinput
+
+if [ "${RUN_DEMO_SEED_ON_DEPLOY:-false}" = "true" ] || [ "${RUN_DEMO_SEED_ON_DEPLOY:-false}" = "True" ]; then
+  python backend/manage.py seed_demo_data --skip-if-exists
+fi
+
+exec gunicorn config.wsgi:application --chdir backend --bind "0.0.0.0:${PORT:-8000}"
